@@ -25,11 +25,14 @@ class CPU:
 		# Program Counter
 		self.PC = 1
 	def runInstruction(self):
-		if self.IR0 == 0x0: # HLT
+		if self.IR0 == 0x0: # NOP
+			# Syntax NOP
+			pass
+		elif self.IR0 == 0x1: # HLT
 			# Syntax: HLT
 			self.halt = True
 		
-		elif self.IR0 == 0x1: # MOV
+		elif self.IR0 == 0x2: # MOV
 			# Syntax: MOV REG, REG
 			try:
 				source = getattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR2])
@@ -40,14 +43,14 @@ class CPU:
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x2: # MOV
+		elif self.IR0 == 0x3: # MOV
 			# Syntax: MOV REG, INT
 			try:
 				setattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1], self.IR2)
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x3: # MOV
+		elif self.IR0 == 0x4: # MOV
 			# Syntax: MOV REG, [ADDR]
 			try:
 				source = self.memory[self.IR2]
@@ -58,7 +61,7 @@ class CPU:
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x4: # MOV
+		elif self.IR0 == 0x5: # MOV
 			# Syntax MOV [ADDR], REG
 			try:
 				source = getattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR2])
@@ -69,14 +72,14 @@ class CPU:
 			except IndexError:
 				print(f"Memory address {self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x5: # MOV
+		elif self.IR0 == 0x6: # MOV
 			# Syntax MOV [ADDR], INT
 			try:
 				self.memory[self.IR1] = self.IR2
 			except IndexError:
 				print(f"Memory address {self.IR2} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x6: # MOV
+		elif self.IR0 == 0x7: # MOV
 			# Syntax MOV [ADDR], INT
 			try:
 				source = self.memory[self.IR2]
@@ -88,7 +91,7 @@ class CPU:
 				print(f"Memory address {self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
 		
-		elif self.IR0 == 0x7: # ADD
+		elif self.IR0 == 0x8: # ADD
 			# Syntax ADD REG, REG
 			try:
 				source = getattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR2])
@@ -99,14 +102,14 @@ class CPU:
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x8: # ADD
+		elif self.IR0 == 0x9: # ADD
 			# Syntax ADD REG, INT
 			try:
 				setattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1], self.IR2+getattr((self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1])))
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x9: # ADD
+		elif self.IR0 == 0xA: # ADD
 			# Syntax ADD REG, [ADDR]
 			try:
 				source = self.memory[self.IR2]
@@ -117,7 +120,7 @@ class CPU:
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0xA: # ADD
+		elif self.IR0 == 0xB: # ADD
 			# Syntax ADD [ADDR], INT
 			try:
 				self.memory[self.IR1] += self.IR2
@@ -125,7 +128,7 @@ class CPU:
 				print(f"Memory address {self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
 		
-		elif self.IR0 == 0xB: # SUB
+		elif self.IR0 == 0xC: # SUB
 			# Syntax SUB REG, REG
 			try:
 				source = getattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR2])
@@ -136,14 +139,14 @@ class CPU:
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0xC: # SUB
+		elif self.IR0 == 0xD: # SUB
 			# Syntax SUB REG, INT
 			try:
 				setattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1], self.IR2-getattr((self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1])))
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0xD: # SUB
+		elif self.IR0 == 0xE: # SUB
 			# Syntax SUB REG, [ADDR]
 			try:
 				source = self.memory[self.IR2]
@@ -154,7 +157,7 @@ class CPU:
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0xE: # SUB
+		elif self.IR0 == 0xF: # SUB
 			# Syntax SUB [ADDR], INT
 			try:
 				self.memory[self.IR1] -= self.IR2
@@ -162,7 +165,7 @@ class CPU:
 				print(f"Memory address {self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
 		
-		elif self.IR0 == 0xF: # MUL
+		elif self.IR0 == 0x10: # MUL
 			# Syntax MUL REG, REG
 			try:
 				source = getattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR2])
@@ -173,14 +176,14 @@ class CPU:
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x10: # MUL
+		elif self.IR0 == 0x11: # MUL
 			# Syntax MUL REG, INT
 			try:
 				setattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1], self.IR2*getattr((self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1])))
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x11: # MUL
+		elif self.IR0 == 0x12: # MUL
 			# Syntax MUL REG, [ADDR]
 			try:
 				source = self.memory[self.IR2]
@@ -191,7 +194,7 @@ class CPU:
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x12: # MUL
+		elif self.IR0 == 0x13: # MUL
 			# Syntax MUL [ADDR], INT
 			try:
 				self.memory[self.IR1] *= self.IR2
@@ -199,7 +202,7 @@ class CPU:
 				print(f"Memory address {self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
 		
-		elif self.IR0 == 0x13: # DIV
+		elif self.IR0 == 0x14: # DIV
 			# Syntax DIV REG, REG
 			try:
 				source = getattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR2])
@@ -210,14 +213,14 @@ class CPU:
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x14: # DIV
+		elif self.IR0 == 0x15: # DIV
 			# Syntax DIV REG, INT
 			try:
 				setattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1], self.IR2/getattr((self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1])))
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x15: # DIV
+		elif self.IR0 == 0x16: # DIV
 			# Syntax DIV REG, [ADDR]
 			try:
 				source = self.memory[self.IR2]
@@ -228,7 +231,7 @@ class CPU:
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x16: # DIV
+		elif self.IR0 == 0x17: # DIV
 			# Syntax DIV [ADDR], INT
 			try:
 				self.memory[self.IR1] /= self.IR2
@@ -236,7 +239,7 @@ class CPU:
 				print(f"Memory address {self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
 		
-		elif self.IR0 == 0x17: # MOD
+		elif self.IR0 == 0x18: # MOD
 			# Syntax MOD REG, REG
 			try:
 				source = getattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR2])
@@ -247,14 +250,14 @@ class CPU:
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x18: # MOD
+		elif self.IR0 == 0x19: # MOD
 			# Syntax MOD REG, INT
 			try:
 				setattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1], self.IR2%getattr((self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1])))
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x19: # MOD
+		elif self.IR0 == 0x1A: # MOD
 			# Syntax MOD REG, [ADDR]
 			try:
 				source = self.memory[self.IR2]
@@ -265,7 +268,7 @@ class CPU:
 			except IndexError:
 				print(f"Register #{self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
-		elif self.IR0 == 0x1A: # MOD
+		elif self.IR0 == 0x1B: # MOD
 			# Syntax MOD [ADDR], INT
 			try:
 				self.memory[self.IR1] %= self.IR2
@@ -273,50 +276,50 @@ class CPU:
 				print(f"Memory address {self.IR1} does not exist (See documentation)"); exit()
 			self.PC += 1
 
-		elif self.IR0 == 0x1B: # JMP
+		elif self.IR0 == 0x1C: # JMP
 			# Syntax JMP INT
 			self.PC = self.IR1
-		elif self.IR0 == 0x1C: # JMP
+		elif self.IR0 == 0x1D: # JMP
 			# Syntax JMP REG
 			self.PC = getattr((self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1]))
-		elif self.IR0 == 0x1D: # JMP
+		elif self.IR0 == 0x1E: # JMP
 			# Syntax JMP [ADDR]
 			self.PC = self.memory[self.IR1]
 
-		elif self.IR0 == 0x1E: # JPZ
+		elif self.IR0 == 0x1F: # JPZ
 			# Syntax JPZ INT
 			if self.zeroF:self.PC = self.IR1
 			else: self.PC += 1
-		elif self.IR0 == 0x1F: # JPZ
+		elif self.IR0 == 0x20: # JPZ
 			# Syntax JPZ REG
 			if self.zeroF:self.PC = getattr((self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1]))
 			else: self.PC += 1
-		elif self.IR0 == 0x20: # JPZ
+		elif self.IR0 == 0x21: # JPZ
 			# Syntax JPZ [ADDR]
 			if self.zeroF:self.PC = self.memory[self.IR1]
 			else: self.PC += 1
 
-		elif self.IR0 == 0x21: # JNZ
+		elif self.IR0 == 0x22: # JNZ
 			# Syntax JNZ INT
 			if not self.zeroF:self.PC = self.IR1
 			else: self.PC += 1
-		elif self.IR0 == 0x22: # JNZ
+		elif self.IR0 == 0x23: # JNZ
 			# Syntax JNZ REG
 			if not self.zeroF:self.PC = getattr((self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1]))
 			else: self.PC += 1
-		elif self.IR0 == 0x23: # JNZ
+		elif self.IR0 == 0x24: # JNZ
 			# Syntax JNZ [ADDR]
 			if not self.zeroF:self.PC = self.memory[self.IR1]
 			else: self.PC += 1
 
-		elif self.IR0 == 0x24: # POP
+		elif self.IR0 == 0x25: # POP
 			setattr(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1], self.stack.pop(0))
-		elif self.IR0 == 0x22: # POP
+		elif self.IR0 == 0x26: # POP
 			self.memory[self.IR0] = self.stack.pop(0)
 
-		elif self.IR0 == 0x25: # PUSH
+		elif self.IR0 == 0x27: # PUSH
 			self.stack.append(self, ["GP0", "GP1", "GP2", "GP3", "IO"][self.IR1])
-		elif self.IR0 == 0x26: # PUSH
+		elif self.IR0 == 0x28: # PUSH
 			self.stack.append(self.memory[self.IR0])
 	def runCurrentInstruction(self):
 		if not self.halt:
@@ -326,5 +329,6 @@ class CPU:
 			self.runInstruction()
 
 breadCPU = CPU()
+breadCPU.memory[0] = 0x1 # HLT
 breadCPU.runCurrentInstruction()
 print(breadCPU.halt) # Should always be True with it running HLT
