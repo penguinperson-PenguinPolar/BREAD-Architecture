@@ -4,5 +4,4 @@ Architecture: https://docs.google.com/document/d/1ElCRIVdjZPaOfBtRwQR4t3v-fzibio
 # Notes
 I might add more instructions in the future.<br/><br/>
 If anyone wants to make an assembler that would be cool.<br/><br/>
-I am making the emulator.<br/><br/>
-Does anyone know how to port the linux kernel, I know how to port software (By hand), and where can I even find the source code for the kernel
+Does anyone know how to port the linux kernel, I know how to port software (By hand), But not the kernel
